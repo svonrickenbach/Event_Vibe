@@ -1,12 +1,13 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash 
 import re
+from .base_model import BaseModel
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-0._-]+\.[a-zA-Z]+$')
 NAME_REGEX = re.compile(r'^[a-zA-Z]+$')
 PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
 mydb = 'login_reg_flask'
 
-class User:
+class User(BaseModel):
     def __init__(self, data):
         self.id = data['id']
         self.first_name = data['first_name']
