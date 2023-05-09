@@ -10,5 +10,9 @@ def create_user():
     data = request.json # extract the data submitted from the request. Handle EXACTLY like you do request.form.
 
     user = User.save(data)
-    return jsonify(user.to_json()), 201
+    print(user)
+    user2 = User.getByID(user)
+    print(user2)
+
+    return jsonify(user2.to_json()), 201
 
