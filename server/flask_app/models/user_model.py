@@ -23,7 +23,7 @@ class User(BaseModel):
     def save(cls, data):
         query = "INSERT INTO users (first_name, last_name, email, password, created_at, updated_at) VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s, NOW(), NOW());"
         results = connectToMySQL(mydb).query_db(query, data)
-        print("RESULTS:" + results)
+        # print("RESULTS:" + results)
         return results
 
     @classmethod
@@ -38,15 +38,19 @@ class User(BaseModel):
         return users
 
     @classmethod
+    def update(cls, data):
+        query = "UPDATE users SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s, password = %(password)s, updated_at = CURRENT_TIMESTAMP WHERE id = %(user_id)s;"
+        return connectToMySQL(mydb).query_db(query, data)
+
+    @classmethod
     def delete(cls, data):
-        query = "DELETE FROM users WHERE id = %(current_id)s;"
+        query = "DELETE FROM users WHERE id = %(id)s;"
         return connectToMySQL(mydb).query_db(query, data)
 
     @classmethod
     def getByID(cls, data):
         query = "SELECT * FROM users WHERE id = %(id)s;"
         results = connectToMySQL(mydb).query_db(query, data)
-        # print(results)
         return cls(results[0]) 
 
     @classmethod 
