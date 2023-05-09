@@ -34,6 +34,6 @@ def update_user(id):
     return jsonify(user_object.to_json()), 200
 
 @app.route('/<int:id>', methods=['DELETE'])
-def delete_joke(id):
+def delete_user(id):
     User.delete({"id":id})
     return jsonify({}), 204

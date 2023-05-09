@@ -1,67 +1,57 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-import re
 from .base_model import BaseModel
 mydb = 'event_vibe'
 
 class Event(BaseModel):
 
-    json_fields = ['id', 'title', 'date', 'time', 'location', 'description', 'image', 'user_id', 'created_at', 'updated_at']
+    json_fields = ['id', 'title', 'date', 'time', 'location', 'description', 'user_id', 'created_at', 'updated_at']
 
     def __init__(self, data):
         self.id = data['id']
-        self.first_name = data['title']
-        self.last_name = data['date']
-        self.email = data['time']
-        self.password = data['location']
-        self.password = data['description']
-        self.password = data['image']
-        self.password = data['user_id']
+        self.title = data['title']
+        self.date = data['date']
+        self.time = data['time']
+        self.location = data['location']
+        self.description = data['description']
+        self.image = data['image']
+        self.user_id = data['user_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO users (title, date, time, location, description, image, user_id, created_at, updated_at) VALUES (%(title)s, %(date)s, %(time)s, %(location)s, %(description)s, %(image)s, %(user_id)s,  NOW(), NOW());"
+        query = "INSERT INTO events (title, date, time, location, description, image, user_id, created_at, updated_at) VALUES (%(title)s, %(date)s, %(time)s, %(location)s, %(description)s, %(image)s, %(user_id)s,  NOW(), NOW());"
         results = connectToMySQL(mydb).query_db(query, data)
         # print("RESULTS:" + results)
         return results
 
-    # @classmethod
-    # def get_all(cls):
-    #     query = "SELECT * FROM users;"
-    #     results = connectToMySQL(mydb).query_db(query)
-    #     # print(results)
-    #     users = []
-    #     for user in results:
-    #         # print(user)
-    #         users.append(cls(user))
-    #     return users
+    @classmethod
+    def get_all(cls):
+        query = "SELECT * FROM events;"
+        results = connectToMySQL(mydb).query_db(query)
+        # print(results)
+        events = []
+        for event in results:
+            # print(user)
+            events.append(cls(event))
+        return events
 
-    # @classmethod
-    # def update(cls, data):
-    #     query = "UPDATE users SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s, password = %(password)s, updated_at = CURRENT_TIMESTAMP WHERE id = %(user_id)s;"
-    #     return connectToMySQL(mydb).query_db(query, data)
+    @classmethod
+    def update(cls, data):
+        query = "UPDATE events SET title = %(title)s, date = %(date)s, time = %(time)s, location = %(location)s, description = %(description)s, image = %(image)s, updated_at = CURRENT_TIMESTAMP WHERE id = %(event_id)s;"
+        return connectToMySQL(mydb).query_db(query, data)
 
-    # @classmethod
-    # def delete(cls, data):
-    #     query = "DELETE FROM users WHERE id = %(id)s;"
-    #     return connectToMySQL(mydb).query_db(query, data)
+    @classmethod
+    def delete(cls, data):
+        query = "DELETE FROM events WHERE id = %(id)s;"
+        return connectToMySQL(mydb).query_db(query, data)
 
-    # @classmethod
-    # def getByID(cls, data):
-    #     query = "SELECT * FROM users WHERE id = %(id)s;"
-    #     results = connectToMySQL(mydb).query_db(query, data)
-    #     return cls(results[0]) 
+    @classmethod
+    def getByID(cls, data):
+        query = "SELECT * FROM events WHERE id = %(id)s;"
+        results = connectToMySQL(mydb).query_db(query, data)
+        return cls(results[0]) 
 
-    # @classmethod 
-    # def get_by_email(cls, data):
-    #     print(data)
-    #     query = "SELECT * FROM users WHERE email = %(email)s;"
-    #     results = connectToMySQL(mydb).query_db(query, data)
-    #     print(f'results: {results}')
-    #     if len(results) < 1: 
-    #         return False
-    #     return cls(results[0])
 
     # @staticmethod
     # def validate_user(user): 
