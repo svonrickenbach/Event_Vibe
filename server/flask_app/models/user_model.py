@@ -61,6 +61,7 @@ class User(BaseModel):
         print(f'results: {results}')
         if len(results) < 1: 
             return False
+        print(results)
         return cls(results[0])
 
     @staticmethod

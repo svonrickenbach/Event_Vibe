@@ -11,7 +11,7 @@ def create_event():
     event = {"id": Event.save(data)}
     event_object = Event.getByID(event)
 
-    return jsonify(event_object.to_json()), 201
+    return jsonify(event_object.to_json()), 201,
 
 
 @app.route('/event', methods=['GET'])

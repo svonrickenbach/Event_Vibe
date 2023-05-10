@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const EventList = (props) => {
     const [events, setEvents] = useState([]);
+    const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
+    // console.table(events)
+
 
     useEffect(() => {
         axios.get("http://127.0.0.1:5000/event")
             .then((res) => {
-                console.log(res.data);
+                console.log("info" + res.data);
                 setEvents(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [])
+
+    useEffect(() => {
+        const userId = Cookies.get('id');
+        axios.get(`http://127.0.0.1:5000/${userId}`)
+            .then((res) => {
+                console.log(res.data);
+                setUsers(res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -24,13 +41,20 @@ const EventList = (props) => {
         return formattedDate;
     }
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+
+        Cookies.remove('id')
+        navigate('/');
+    }
+        
+
     return (
         <div className="container mt-3">
             <div className="row">
                 <div className="col-2 bg-light left">
                     <div className="text-center">
-                        <img src="profile-photo.jpg" alt="Profile Photo" />
-                        <h4>User Name</h4>
+                        <h4>{users.first_name} {users.last_name}</h4>
                     </div>
                     <div className="list-group">
                         <Link to="#" className="mb-3">Add Event</Link>
@@ -39,7 +63,7 @@ const EventList = (props) => {
                         <Link to="#" className="mb-3">Settings</Link>
                     </div>
                     <div className="text-center mt-3">
-                        <button type="button" className="btn btn-secondary">Logout</button>
+                            <button type="button" className="btn btn-secondary" onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
                 <div className="col-10 right">
