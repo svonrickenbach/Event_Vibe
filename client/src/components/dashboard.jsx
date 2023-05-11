@@ -12,6 +12,9 @@ const EventList = (props) => {
 
 
     useEffect(() => {
+        if (!Cookies.get('id')) {
+            navigate('/');
+        }
         axios.get("http://127.0.0.1:5000/event")
             .then((res) => {
                 console.log("info" + res.data);

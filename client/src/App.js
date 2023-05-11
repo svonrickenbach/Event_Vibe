@@ -1,28 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState, useNavigate} from 'react'
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import EventList from './components/dashboard.jsx';
-import LoginRegistrationPage from './components/loginAndRegistration.jsx';
+import Registration from './components/registration.jsx';
+import Login from './components/login.jsx';
 import './App.css';
 import Cookies from 'js-cookie';
 
 function App() {
-  const [key, setKey] = useState(0);
-
-  function handleEventRoute() {
-    setKey(key + 1);
-    window.location.reload();
-  }
 
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route element={<LoginRegistrationPage />} path="/" default />
-          {Cookies.get('id') ? (
-            <Route element={<EventList key={key} onEnter={handleEventRoute} />} path="/event" />
-          ) : (
-            <Route element={<Navigate to="/" />} />
-          )}
+          <Route element={<Login />} path="/" default />
+          <Route element={<Registration />} path="/register" default />
+          <Route element={<EventList />} path="/event" />
         </Routes>
       </BrowserRouter>
     </div>
