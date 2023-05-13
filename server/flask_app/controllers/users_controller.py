@@ -2,13 +2,21 @@ from flask_app import app
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import datetime 
+from flask_bcrypt import Bcrypt
+bycrypt = Bcrypt(app)
 from flask_app.models.user_model import User
 dateFormat = "%m/%d/%Y %I:%M %p"
 
 @app.route('/register', methods=['POST'])
 def create_user():
-    print("run")
-    data = request.json # extract the data submitted from the request. Handle EXACTLY like you do request.form.
+    # print("run")
+    data = request.json 
+    errors = User.validate_user(data)
+    if errors:
+        print(errors)
+        return jsonify({'errors': errors}), 422
+    pw_hash = bycrypt.generate_password_hash(data['password'])
+    data['password'] = pw_hash
     user = {"id": User.save(data)}
     access_token = create_access_token(identity=user["id"])
     return jsonify({"token": access_token}), 200

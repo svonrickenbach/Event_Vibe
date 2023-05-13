@@ -73,13 +73,13 @@ class User(BaseModel):
         if len(user['first_name']) < 1: 
             errors['first_name'] = "must enter a first name"
         elif len(user['first_name']) < 2:
-            errors['first_name_min'] = "must enter a first name"
+            errors['first_name_min'] = "first name must be minimum 2 characters"
         elif not NAME_REGEX.match(user['first_name']): 
             errors['first_name_reg'] = "name must only contain letters!"
         if len(user['last_name']) < 1:
             errors['last_name'] = "must enter a last name"
         elif len(user['last_name']) < 2:
-            errors['last_name_min'] = "must enter a first name"
+            errors['last_name_min'] = "last name must be minimum 2 characters"
         elif not NAME_REGEX.match(user['last_name']): 
             errors['last_name_reg'] = "last name must only contain letters!"
         if len(user['email']) < 1: 
@@ -87,16 +87,16 @@ class User(BaseModel):
         elif not EMAIL_REGEX.match(user['email']): 
             errors['email_reg'] = "Invalid email address!"
         if User.get_by_email(user) != False:
-            errors['email_db'] = "Invalid email"
+            errors['email_db'] = "An account already exists with this email"
         if len(user['password']) < 1: 
-            flash("must enter a password", 'regError')
+            errors['password'] = "must enter a password"
         elif len(user['password']) < 9:
-            flash('password must be longer than 8 characters', 'regError')
+            errors['password_len'] = "password must be 8 characters or more"
         elif not PASSWORD_REGEX.match(user['password']): 
-            flash("Password must contain at least one uppercase letter and a number!", 'regError')
+            errors['password_reg'] = "Password must contain at least one uppercase letter and a number!"
         if len(user['confirmPassword']) < 1: 
-            flash("please confirm your password", 'regError')
+            errors['confirm_password'] = "please confirm your password"
         elif user['password'] != user['confirmPassword']:
-            flash('passwords do not match', 'regError')
+            errors['password_match'] = "passwords do not match"
         
         return errors
