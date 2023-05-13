@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 import re
+from flask import flash 
 from .base_model import BaseModel
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-0._-]+\.[a-zA-Z]+$')
 NAME_REGEX = re.compile(r'^[a-zA-Z]+$')
@@ -58,55 +59,44 @@ class User(BaseModel):
         print(data)
         query = "SELECT * FROM users WHERE email = %(email)s;"
         results = connectToMySQL(mydb).query_db(query, data)
-        print(f'results: {results}')
+        # print(f'results: {results}')
         if len(results) < 1: 
             return False
-        print(results)
+        # print(results)
         return cls(results[0])
 
     @staticmethod
     def validate_user(user): 
-        is_valid = True
-        if len(user['fname']) < 1: 
-            flash("must enter a first name", 'regError')
-            is_valid = False 
-        elif len(user['fname']) < 2:
+
+        errors = []
+
+        if len(user['first_name']) < 1: 
+            errors.append("must enter a first name", 'regError')
+        elif len(user['first_name']) < 2:
             flash('first name must be longer than two characters', 'regError')
-            is_valid = False
-        elif not NAME_REGEX.match(user['fname']): 
+        elif not NAME_REGEX.match(user['first_name']): 
             flash("First name cannot contain numbers (unless you're Elon Musks child)!", 'regError')
-            is_valid = False
-        if len(user['lname']) < 1:
+        if len(user['last_name']) < 1:
             flash("must enter a last name", 'regError')
-            is_valid = False
-        elif len(user['lname']) < 2:
+        elif len(user['last_name']) < 2:
             flash('last name must be longer than two characters', 'regError')
-            is_valid = False
-        elif not NAME_REGEX.match(user['lname']): 
+        elif not NAME_REGEX.match(user['last_name']): 
             flash("Last name cannot contain numbers (unless you're Elon Musks child)!", 'regError')
-            is_valid = False
         if len(user['email']) < 1: 
             flash("must enter an email", 'regError')
-            is_valid = False 
         elif not EMAIL_REGEX.match(user['email']): 
             flash("Invalid email address!", 'regError')
-            is_valid = False
         if User.get_by_email(user) != False:
                 flash("Invalid email address! ", 'regError')
-                is_valid = False
         if len(user['password']) < 1: 
             flash("must enter a password", 'regError')
-            is_valid = False 
         elif len(user['password']) < 9:
             flash('password must be longer than 8 characters', 'regError')
-            is_valid = False
         elif not PASSWORD_REGEX.match(user['password']): 
             flash("Password must contain at least one uppercase letter and a number!", 'regError')
-            is_valid = False
-        if len(user['passConf']) < 1: 
+        if len(user['confirmPassword']) < 1: 
             flash("please confirm your password", 'regError')
-            is_valid = False 
-        elif user['password'] != user['passConf']:
+        elif user['password'] != user['confirmPassword']:
             flash('passwords do not match', 'regError')
-            is_valid = False
-        return is_valid
+        
+        return errors

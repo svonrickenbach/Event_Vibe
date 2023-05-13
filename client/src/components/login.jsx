@@ -13,24 +13,22 @@ const Login = () => {
     const navigate = useNavigate();
 
     const onLoginSubmitHandler = (e) => {
-
         e.preventDefault();
-
+    
         axios.post('http://127.0.0.1:5000/login', {
             email,
             password
         })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-                Cookies.set('id', res.data.id)
-                navigate("/event");
-            })
-            .catch((err) => {
-                console.log(err);
-                // setErrors(err.response.data.errors);
-                // console.log(err.response.data.errors);
-            })
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+            Cookies.set('id', res.data)
+            navigate("/event");
+        })
+        .catch((err) => {
+            console.log(err);
+            setErrors(err.response.data.message);
+        });
     }
 
     return (

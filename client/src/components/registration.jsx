@@ -23,16 +23,19 @@ const Registration = () => {
             first_name,
             last_name,
             email,
-            password
+            password,
+            confirmPassword
         })
             .then(res => {
                 console.log(res);
                 console.log(res.data);
+                // setErrors(res.data.flash_message);
                 Cookies.set('id', res.data.id)
                 navigate("/event");
             })
             .catch((err) => {
                 console.log(err);
+                // setErrors(err.data.flash_message);
                 // setErrors(err.response.data.errors);
                 // console.log(err.response.data.errors);
             })
