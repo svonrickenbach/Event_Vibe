@@ -68,26 +68,26 @@ class User(BaseModel):
     @staticmethod
     def validate_user(user): 
 
-        errors = []
+        errors = {}
 
         if len(user['first_name']) < 1: 
-            errors.append("must enter a first name", 'regError')
+            errors['first_name'] = "must enter a first name"
         elif len(user['first_name']) < 2:
-            flash('first name must be longer than two characters', 'regError')
+            errors['first_name_min'] = "must enter a first name"
         elif not NAME_REGEX.match(user['first_name']): 
-            flash("First name cannot contain numbers (unless you're Elon Musks child)!", 'regError')
+            errors['first_name_reg'] = "name must only contain letters!"
         if len(user['last_name']) < 1:
-            flash("must enter a last name", 'regError')
+            errors['last_name'] = "must enter a last name"
         elif len(user['last_name']) < 2:
-            flash('last name must be longer than two characters', 'regError')
+            errors['last_name_min'] = "must enter a first name"
         elif not NAME_REGEX.match(user['last_name']): 
-            flash("Last name cannot contain numbers (unless you're Elon Musks child)!", 'regError')
+            errors['last_name_reg'] = "last name must only contain letters!"
         if len(user['email']) < 1: 
-            flash("must enter an email", 'regError')
+            errors['email'] = "must enter an email"
         elif not EMAIL_REGEX.match(user['email']): 
-            flash("Invalid email address!", 'regError')
+            errors['email_reg'] = "Invalid email address!"
         if User.get_by_email(user) != False:
-                flash("Invalid email address! ", 'regError')
+            errors['email_db'] = "Invalid email"
         if len(user['password']) < 1: 
             flash("must enter a password", 'regError')
         elif len(user['password']) < 9:

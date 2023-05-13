@@ -29,8 +29,7 @@ const Registration = () => {
             .then(res => {
                 console.log(res);
                 console.log(res.data);
-                // setErrors(res.data.flash_message);
-                Cookies.set('id', res.data.id)
+                Cookies.set('token', res.data)
                 navigate("/event");
             })
             .catch((err) => {

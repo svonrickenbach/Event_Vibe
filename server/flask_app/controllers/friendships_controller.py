@@ -15,4 +15,4 @@ def create_friendship():
 def delete_friendship(user_id, user_id1):
     Friendship.delete({"user_id":user_id,
                         "user_id1": user_id1})
-    return jsonify({}), 2040
+    return jsonify({}), 204

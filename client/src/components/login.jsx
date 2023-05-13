@@ -22,12 +22,12 @@ const Login = () => {
         .then(res => {
             console.log(res);
             console.log(res.data);
-            Cookies.set('id', res.data)
+            Cookies.set('token', res.data.token);
             navigate("/event");
         })
         .catch((err) => {
             console.log(err);
-            setErrors(err.response.data.message);
+            setErrors(err);
         });
     }
 

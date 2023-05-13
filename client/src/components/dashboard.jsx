@@ -9,31 +9,37 @@ const EventList = (props) => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     // console.table(events)
-
+    const token = Cookies.get('token');
 
     useEffect(() => {
-        if (!Cookies.get('id')) {
+        if (!token) {
             navigate('/');
         }
-        axios.get("http://127.0.0.1:5000/event")
+        console.log(token);
+        axios.get(`http://127.0.0.1:5000/event`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
             .then((res) => {
-                console.log("info" + res.data);
+                // console.log(res);
                 setEvents(res.data);
             })
             .catch((err) => {
-                console.log(err);
+                // console.log(err);
             })
     }, [])
 
     useEffect(() => {
-        const userId = Cookies.get('id');
-        axios.get(`http://127.0.0.1:5000/${userId}`)
+        axios.get(`http://127.0.0.1:5000/oneuser`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setUsers(res.data);
             })
             .catch((err) => {
-                console.log(err);
+                // console.log(err);
             })
     }, [])
 
@@ -47,10 +53,10 @@ const EventList = (props) => {
     const handleLogout = (e) => {
         e.preventDefault();
 
-        Cookies.remove('id')
+        Cookies.remove('token')
         navigate('/');
     }
-        
+
 
     return (
         <div className="container mt-3">
@@ -66,7 +72,7 @@ const EventList = (props) => {
                         <Link to="#" className="mb-3">Settings</Link>
                     </div>
                     <div className="text-center mt-3">
-                            <button type="button" className="btn btn-secondary" onClick={handleLogout}>Logout</button>
+                        <button type="button" className="btn btn-secondary" onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
                 <div className="col-10 right">
