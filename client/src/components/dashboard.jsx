@@ -66,7 +66,7 @@ const EventList = (props) => {
                         <h4>{users.first_name} {users.last_name}</h4>
                     </div>
                     <div className="list-group">
-                        <Link to="#" className="mb-3">Add Event</Link>
+                        <Link to="/event/create" className="mb-3">Add Event</Link>
                         <Link to="#" className="mb-3">Event Map</Link>
                         <Link to="#" className="mb-3">Friends</Link>
                         <Link to="#" className="mb-3">Settings</Link>
@@ -103,6 +103,9 @@ const EventList = (props) => {
                                                     {formatDate(event.date)} <br />
                                                     {event.title} <br />
                                                     {event.location}
+                                                </div>
+                                                <div>
+                                                    <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link>
                                                 </div>
                                             </div>
                                         </div>

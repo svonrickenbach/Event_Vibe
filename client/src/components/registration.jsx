@@ -30,7 +30,7 @@ const Registration = () => {
                 console.log(res);
                 console.log(res.data);
                 Cookies.set('token', res.data.token)
-                navigate("/event");
+                navigate("/dashboard");
             })
             .catch((err) => {
                 console.log("error:", err);

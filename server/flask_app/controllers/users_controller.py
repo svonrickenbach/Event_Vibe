@@ -23,13 +23,12 @@ def create_user():
 
 @app.route('/login', methods=['POST'])
 def login_user():
-    print("Running")
     user = User.get_by_email(request.json)
-    if user:
+    if user and bycrypt.check_password_hash(user.password, request.json['password']):
         access_token = create_access_token(identity=user.id)
         return jsonify({"token": access_token}), 200
     else:
-        return jsonify({"message": "Unauthorized"}), 401
+        return jsonify({"error": "Invlaid credentials!"}), 401
 
 
 @app.route('/', methods=['GET'])

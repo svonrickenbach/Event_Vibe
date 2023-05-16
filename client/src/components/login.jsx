@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState('');
 
     const navigate = useNavigate();
@@ -23,11 +22,11 @@ const Login = () => {
             console.log(res);
             console.log(res.data);
             Cookies.set('token', res.data.token);
-            navigate("/event");
+            navigate("/dashboard");
         })
         .catch((err) => {
-            console.log(err);
-            setErrors(err);
+            // console.log(err.response.data);
+            setErrors(err.response.data);
         });
     }
 
@@ -38,11 +37,10 @@ const Login = () => {
                 <form onSubmit={onLoginSubmitHandler}>
                     <div className="form-group mb-3">
                         <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} className="form-control" placeholder='Enter email' />
-                        {errors.email ? <p className='text-danger'>{errors.email.message}</p> : null}
                     </div>
                     <div className="form-group">
                         <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} className="form-control" placeholder='Enter password' />
-                        {errors.first_name ? <p className='text-danger'>{errors.password.message}</p> : null}
+                        {errors.error ? <p className='text-danger'>{errors.error}</p> : null}
                     </div>
                     <button type="submit" className="btn btn-primary mt-3 mb-3">Submit</button> <br />
                     <Link to="/register">Register</Link>
