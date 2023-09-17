@@ -1,6 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from .base_model import BaseModel
-from datetime import datetime
+from datetime import datetime, timedelta
 mydb = 'event_vibe'
 
 
@@ -8,6 +8,8 @@ class Event(BaseModel):
 
     json_fields = ['id', 'title', 'date', 'location',
         'description', 'user_id', 'created_at', 'updated_at']
+    
+
 
     def __init__(self, data):
         self.id = data['id']
@@ -21,9 +23,11 @@ class Event(BaseModel):
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
+        # self.time_from_mysql = timedelta(hours=self.time.hour, minutes=self.time.minute)
+
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO events (title, date, location, description, image, user_id, created_at, updated_at) VALUES (%(title)s, %(date)s, %(location)s, %(description)s, %(image)s, %(user_id)s,  NOW(), NOW());"
+        query = "INSERT INTO events (title, date, time, location, description, image, user_id, created_at, updated_at) VALUES (%(title)s, %(date)s, %(time)s, %(location)s, %(description)s, %(image)s, %(user_id)s,  NOW(), NOW());"
         results = connectToMySQL(mydb).query_db(query, data)
         # print("RESULTS:" + results)
         return results
@@ -41,7 +45,7 @@ class Event(BaseModel):
 
     @classmethod
     def update(cls, data):
-        query = "UPDATE events SET title = %(title)s, date = %(date)s,location = %(location)s, description = %(description)s, image = %(image)s, updated_at = CURRENT_TIMESTAMP WHERE id = %(event_id)s;"
+        query = "UPDATE events SET title = %(title)s, date = %(date)s, time = %(time)s, location = %(location)s, description = %(description)s, image = %(image)s, updated_at = CURRENT_TIMESTAMP WHERE id = %(event_id)s;"
         return connectToMySQL(mydb).query_db(query, data)
 
     @classmethod

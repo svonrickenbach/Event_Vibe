@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const EditEvent = () => {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
-    // const [time, setTime] = useState('');
+    const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -30,7 +30,7 @@ const EditEvent = () => {
         axios.put(`http://127.0.0.1:5000/event/${id}`, {
             title,
             date,
-            // time,
+            time,
             location,
             description,
             image,
@@ -67,10 +67,10 @@ const EditEvent = () => {
                             {errors.date ? <p className='text-danger'>{errors.date}</p> : null}
                             {errors.date_future ? <p className='text-danger'>{errors.date_future}</p> : null}
                         </div>
-                        {/* <div className="form-group mb-3">
+                        <div className="form-group mb-3">
                             <input type="time" onChange={(e) => setTime(e.target.value)} value={time} className="form-control" placeholder='Enter email' />
                             {errors.time ? <p className='text-danger'>{errors.time}</p> : null}
-                        </div> */}
+                        </div>
                         <div className="form-group mb-3">
                             <input type="text" onChange={(e) => setLocation(e.target.value)} value={location} className="form-control" placeholder='Enter a location' />
                             {errors.location ? <p className='text-danger'>{errors.location}</p> : null}

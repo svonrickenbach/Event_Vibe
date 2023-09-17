@@ -53,12 +53,15 @@ const EventDisplay = (props) => {
         navigate('/');
     }
 
-
     return (
         <div>
             <h1>Event Details</h1>
+            <Link to={"/dashboard"}className="mb-3">Dashboard</Link>
+            <br></br>
+            <Link to="/event/create" className="mb-3">Add Event</Link>
             <p>Title: {event.title}</p>
             <p>Date: {formatDate(event.date)}</p>
+            {/* <p>Time: {event.time}</p> */}
             <p>Location: {event.location}</p>
             <p>Description: {event.description}</p>
             <Link to={"/event/update/" + event.id}className="mb-3">Edit</Link>

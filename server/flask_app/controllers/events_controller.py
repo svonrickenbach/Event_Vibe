@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_app.models.event_model import Event
 dateFormat = "%m/%d/%Y %I:%M %p"
 
+
 @app.route('/event', methods=['POST'])
 @jwt_required()
 def create_event():
