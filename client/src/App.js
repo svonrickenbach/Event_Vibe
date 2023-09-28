@@ -18,6 +18,7 @@ function App() {
       {/* BrowserRouter enables client-side routing */}
       <BrowserRouter>
         <Routes>
+          {/* The route element calls on the component required. The path is the HTTP path that the browswer registers. */}
           <Route element={<Login />} path="/" default />
           <Route element={<Registration />} path="/register" default />
           <Route element={<EventList />} path="/dashboard" />
