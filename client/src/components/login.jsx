@@ -25,7 +25,7 @@ const Login = () => {
             navigate("/dashboard");
         })
         .catch((err) => {
-            // console.log(err.response.data);
+            console.log(err.response.data);
             setErrors(err.response.data);
         });
     }

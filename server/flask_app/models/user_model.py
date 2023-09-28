@@ -56,7 +56,7 @@ class User(BaseModel):
 
     @classmethod 
     def get_by_email(cls, data):
-        print(data)
+        # print(data)
         query = "SELECT * FROM users WHERE email = %(email)s;"
         results = connectToMySQL(mydb).query_db(query, data)
         # print(f'results: {results}')
