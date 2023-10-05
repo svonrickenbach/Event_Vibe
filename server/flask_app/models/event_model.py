@@ -7,7 +7,7 @@ mydb = 'event_vibe'
 class Event(BaseModel):
 
     json_fields = ['id', 'title', 'date', 'location',
-        'description', 'user_id', 'created_at', 'updated_at']
+        'description', 'user_id', 'created_at', 'updated_at', 'user_status_id']
     
 
 
@@ -15,15 +15,15 @@ class Event(BaseModel):
         self.id = data['id']
         self.title = data['title']
         self.date = data['date']
-        # self.time = data['time']
+        self.time = data['time']
         self.location = data['location']
         self.description = data['description']
         self.image = data['image']
         self.user_id = data['user_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.user_status_id = data['user_status_id']
 
-        # self.time_from_mysql = timedelta(hours=self.time.hour, minutes=self.time.minute)
 
     @classmethod
     def save(cls, data):
@@ -34,7 +34,7 @@ class Event(BaseModel):
 
     @classmethod
     def get_all(cls):
-        query = "SELECT * FROM events;"
+        query = "SELECT * FROM event_vibe.events LEFT JOIN event_vibe.statuses ON events.id = statuses.event_id;"
         results = connectToMySQL(mydb).query_db(query)
         # print(results)
         events = []

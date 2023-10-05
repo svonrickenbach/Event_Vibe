@@ -57,6 +57,7 @@ const EventList = (props) => {
         navigate('/');
     }
 
+    console.log("user_id " + users.id)
 
     return (
         <div className="container mt-3">
@@ -93,24 +94,25 @@ const EventList = (props) => {
                         <div className="col">
                             <ul className="list-group">
                                 {events.map((event) => (
-                                    <li key={event.id} className="list-group-item">
-                                        <div className="row align-items-center">
-                                            <div className="col-auto">
-                                                <img src={event.imageUrl} alt={event.title} width="100" height="100" />
-                                            </div>
-                                            <div className="col">
-                                                <div>
-                                                    {formatDate(event.date)} <br />
-                                                    {event.title} <br />
-                                                    {event.location}
+                                    users.id === event.user_status_id ? ( 
+                                        <li key={event.id} className="list-group-item">
+                                            <div className="row align-items-center">
+                                                <div className="col-auto">
+                                                    <img src={event.imageUrl} alt={event.title} width="100" height="100" />
                                                 </div>
-                                                <div>
-                                                    <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link>
+                                                <div className="col">
+                                                    <div>
+                                                        {formatDate(event.date)} <br />
+                                                        {event.title} <br />
+                                                        {event.location}
+                                                    </div>
+                                                    <div>
+                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                ))}
+                                        </li>) : null
+                                    ))}
                             </ul>
                         </div>
                     </div>

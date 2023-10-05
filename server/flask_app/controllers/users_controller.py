@@ -40,9 +40,9 @@ def get_all():
 @app.route('/oneuser', methods=['GET'])
 @jwt_required()
 def get_user():
-    print("running")
+    # print("running")
     current_user_id = get_jwt_identity()
-    print(current_user_id)
+    # print(current_user_id)
     user = User.getByID({"id":current_user_id})
     return jsonify(user.to_json()), 200
 
