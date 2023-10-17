@@ -22,7 +22,7 @@ class Event(BaseModel):
         self.user_id = data['user_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        self.user_status_id = data['user_status_id']
+        self.user_status_id = data.get('user_status_id')
 
 
     @classmethod

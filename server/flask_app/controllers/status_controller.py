@@ -8,6 +8,7 @@ def create_status():
     data = request.json # extract the data submitted from the request. Handle EXACTLY like you do request.form.
     print(data)
     status = {"id": Status.save(data)}
+    print(status)
     status_object = Status.getByID(status)
 
     return jsonify(status_object.to_json()), 201

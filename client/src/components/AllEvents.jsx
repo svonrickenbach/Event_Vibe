@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const EventList = (props) => {
+const AllEvents = (props) => {
     const [events, setEvents] = useState([]);
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
@@ -52,9 +52,23 @@ const EventList = (props) => {
 
     const handleLogout = (e) => {
         e.preventDefault();
-
         Cookies.remove('token')
         navigate('/');
+    }
+
+    const setStatus = (e) => {
+        const user_status_id = users.id
+        const event_id = events.id
+        axios.post('http://127.0.0.1:5000/status', {
+            user_status_id, event_id
+        })
+        .then((res) => {
+            // console.log(res.data);
+            setUsers(res.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        }, [])
     }
 
     console.log("user_id " + users.id)
@@ -67,7 +81,7 @@ const EventList = (props) => {
                         <h4>{users.first_name} {users.last_name}</h4>
                     </div>
                     <div className="list-group">
-                        <Link to="/event" className="mb-3">All Events</Link>
+                        <Link to="/dashboard" className="mb-3">Your Events</Link>
                         <Link to="/event/create" className="mb-3">Add Event</Link>
                         <Link to="#" className="mb-3">Event Map</Link>
                         <Link to="#" className="mb-3">Friends</Link>
@@ -81,7 +95,7 @@ const EventList = (props) => {
                     <div className="row">
                         <div className="col mt-5 mb-3">
                             <div className="text-center">
-                                <h1>Your Events</h1>
+                                <h1>All Events</h1>
                             </div>
                         </div>
                         <div className="col-auto">
@@ -95,7 +109,6 @@ const EventList = (props) => {
                         <div className="col">
                             <ul className="list-group">
                                 {events.map((event) => (
-                                    users.id === event.user_status_id || users.id === event.user_id ? ( 
                                         <li key={event.id} className="list-group-item">
                                             <div className="row align-items-center">
                                                 <div className="col-auto">
@@ -108,11 +121,12 @@ const EventList = (props) => {
                                                         {event.location}
                                                     </div>
                                                     <div>
-                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link>
+                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link><br></br>
+                                                        <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={setStatus}>Going?</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>) : null
+                                        </li>
                                     ))}
                             </ul>
                         </div>
@@ -123,4 +137,4 @@ const EventList = (props) => {
     );
 };
 
-export default EventList;
+export default AllEvents;

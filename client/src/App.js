@@ -9,6 +9,7 @@ import './App.css';
 import CreateEvent from './components/createEvent.jsx';
 import EventDisplay from './components/displayEvent.jsx';
 import EditEvent from './components/editEvent';
+import AllEvents from './components/AllEvents.jsx';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route element={<Login />} path="/" default />
           <Route element={<Registration />} path="/register" default />
           <Route element={<EventList />} path="/dashboard" />
+          <Route element={<AllEvents />} path="/event" />
           <Route element={<CreateEvent/>} path="/event/create" />
           <Route element={<EventDisplay/>} path="/event/:id" />
           <Route element={<EditEvent/>} path="/event/update/:id" />
