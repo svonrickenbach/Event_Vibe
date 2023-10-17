@@ -56,9 +56,10 @@ const AllEvents = (props) => {
         navigate('/');
     }
 
-    const setStatus = (e) => {
+    const setStatus = (eventId) => {
+        console.log("event id:" + events.id)
         const user_status_id = users.id
-        const event_id = events.id
+        const event_id = eventId
         axios.post('http://127.0.0.1:5000/status', {
             user_status_id, event_id
         })
@@ -122,7 +123,7 @@ const AllEvents = (props) => {
                                                     </div>
                                                     <div>
                                                         <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link><br></br>
-                                                        <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={setStatus}>Going?</button>
+                                                        <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(event.id)}>Going?</button>
                                                     </div>
                                                 </div>
                                             </div>

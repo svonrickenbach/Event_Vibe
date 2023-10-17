@@ -6,7 +6,8 @@ from flask_app.models.status_model import Status
 def create_status():
     print("run")
     data = request.json # extract the data submitted from the request. Handle EXACTLY like you do request.form.
-    print(data)
+    # print("data")
+    print("data: " + str(data))
     status = {"id": Status.save(data)}
     print(status)
     status_object = Status.getByID(status)

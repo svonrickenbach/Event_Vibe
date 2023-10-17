@@ -4,7 +4,7 @@ mydb = 'event_vibe'
 
 class Status(BaseModel):
 
-    json_fields = ['id', 'user_id', 'event_id']
+    json_fields = ['id', 'user_status_id', 'event_id']
 
     def __init__(self, data):
         self.id = data['id']
@@ -14,7 +14,7 @@ class Status(BaseModel):
 # I want to user INSERT IGNORE here to prevent any duplicates. However, if something is not sent to the database, then we don't have an id returned for the getByID method to use to return an object to satify the .to_json requirenment. Will have to control it on the front end for now. 
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO statuses (user_status_id, event_id) VALUES (%(user_id)s, %(event_id)s);"
+        query = "INSERT INTO statuses (user_status_id, event_id) VALUES (%(user_status_id)s, %(event_id)s);"
         results = connectToMySQL(mydb).query_db(query, data)
         # print("RESULTS:" + results)
         return results
