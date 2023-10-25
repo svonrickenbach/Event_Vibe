@@ -57,6 +57,38 @@ const EventList = (props) => {
         navigate('/');
     }
 
+    const setStatus = (eventId) => {
+        console.log("event id:" + events.id)
+        const user_status_id = users.id
+        const event_id = eventId
+        axios.post('http://127.0.0.1:5000/status', {
+            user_status_id, event_id
+        })
+        .then((res) => {
+            // console.log(res.data);
+            setUsers(res.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        }, [])
+    }
+
+    const setStatusDelete = (eventId) => {
+        console.log("event id:" + events.id)
+        const user_status_id = users.id
+        const event_id = eventId
+        axios.delete(`http://127.0.0.1:5000/status/${user_status_id}/${event_id}`, {
+            user_status_id, event_id
+        })
+        .then((res) => {
+            // console.log(res.data);
+            setUsers(res.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        }, [])
+    }
+
     console.log("user_id " + users.id)
 
     return (
@@ -108,18 +140,55 @@ const EventList = (props) => {
                                                         {event.location}
                                                     </div>
                                                     <div>
-                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link>
+                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link> <br></br>
+                                                        {users.id !== event.user_id ? (
+                                                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatusDelete(event.id)}>Gotta Bail</button>
+                                                        ) : null}
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>) : null
+                                        </li>) 
+                                        : null
+                                    ))}
+                            </ul>
+                            <div className="text-center">
+                                <h1>All Events</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <ul className="list-group">
+                                {events.map((event) => (
+                                    users.id !== event.user_status_id && users.id !== event.user_id ? (
+                                        <li key={event.id} className="list-group-item">
+                                            <div className="row align-items-center">
+                                                <div className="col-auto">
+                                                    <img src={event.imageUrl} alt={event.title} width="100" height="100" />
+                                                </div>
+                                                <div className="col">
+                                                    <div>
+                                                        {formatDate(event.date)} <br />
+                                                        {event.title} <br />
+                                                        {event.location}
+                                                    </div>
+                                                    <div>
+                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link><br></br>
+                                                        {users.id !== event.user_id && users.id !== event.user_status_id ? (
+                                                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(event.id)}>Going?</button>
+                                                        ): null
+                                                            }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>) : null 
                                     ))}
                             </ul>
                         </div>
                     </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
     );
 };
 

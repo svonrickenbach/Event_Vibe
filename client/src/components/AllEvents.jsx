@@ -72,6 +72,22 @@ const AllEvents = (props) => {
         }, [])
     }
 
+    const setStatusDelete = (eventId) => {
+        console.log("event id:" + events.id)
+        const user_status_id = users.id
+        const event_id = eventId
+        axios.delete(`http://127.0.0.1:5000/status/${user_status_id}/${event_id}`, {
+            user_status_id, event_id
+        })
+        .then((res) => {
+            // console.log(res.data);
+            setUsers(res.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        }, [])
+    }
+
     console.log("user_id " + users.id)
 
     return (
@@ -123,12 +139,19 @@ const AllEvents = (props) => {
                                                     </div>
                                                     <div>
                                                         <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link><br></br>
-                                                        <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(event.id)}>Going?</button>
+                                                        {users.id !== event.user_id && users.id !== event.user_status_id ? (
+                                                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(event.id)}>Going?</button>
+                                                        ):
+                                                            <div>
+                                                                <h3>Going!</h3>
+                                                                <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatusDelete(event.id)}>Gotta Bail</button>
+                                                            </div>
+                                                            }
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>
-                                    ))}
+                                        </li>)
+                                    )}
                             </ul>
                         </div>
                     </div>

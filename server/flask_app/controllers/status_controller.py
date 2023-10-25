@@ -14,8 +14,8 @@ def create_status():
 
     return jsonify(status_object.to_json()), 201
 
-@app.route('/status/<int:user_id>/<int:event_id>', methods=['DELETE'])
-def delete_status(user_id, event_id):
-    Status.delete({"user_id":user_id,
+@app.route('/status/<int:user_status_id>/<int:event_id>', methods=['DELETE'])
+def delete_status(user_status_id, event_id):
+    Status.delete({"user_status_id":user_status_id,
                         "event_id": event_id})
     return jsonify({}), 204

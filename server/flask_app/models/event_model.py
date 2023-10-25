@@ -34,7 +34,7 @@ class Event(BaseModel):
 
     @classmethod
     def get_all(cls):
-        query = "SELECT * FROM event_vibe.events LEFT JOIN event_vibe.statuses ON events.id = statuses.event_id;"
+        query = "SELECT * FROM event_vibe.events LEFT JOIN event_vibe.statuses ON events.id = statuses.event_id LEFT JOIN event_vibe.invites ON events.id = invites.events_id;"
         results = connectToMySQL(mydb).query_db(query)
         # print(results)
         events = []
