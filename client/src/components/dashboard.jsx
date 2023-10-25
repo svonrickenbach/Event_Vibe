@@ -13,7 +13,7 @@ const EventList = (props) => {
 
     useEffect(() => {
         if (!token) {
-            navigate('/');
+            navigate('/login');
         }
         console.log(token);
         axios.get(`http://127.0.0.1:5000/event`, {
@@ -54,7 +54,7 @@ const EventList = (props) => {
         e.preventDefault();
 
         Cookies.remove('token')
-        navigate('/');
+        navigate('/login');
     }
 
     const setStatus = (eventId) => {

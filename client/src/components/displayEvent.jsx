@@ -11,14 +11,12 @@ const EventDisplay = (props) => {
     const [users, setUsers] = useState([]);
     // console.table(events)
     const token = Cookies.get('token');
-    const [selectedUser, setSelectedUser] = useState(''); // Track the selected user
-    const [allUsers, setAllUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState([]); // Track the selected user
     const [availableUsers, setAvailableUsers] = useState([]);
-
 
     useEffect(() => {
         if (!token) {
-            navigate('/');
+            navigate('/login');
         }
         console.log(token);
         axios.get(`http://127.0.0.1:5000/event/${id}`, {
@@ -34,8 +32,24 @@ const EventDisplay = (props) => {
     }, [])
 
     useEffect(() => {
+        axios.get(`http://127.0.0.1:5000/oneuser`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+            .then((res) => {
+                // console.log(res.data);
+                setUsers(res.data);
+                console.log("current user: " + res.data.id)
+            })
+            .catch((err) => {
+                // console.log(err);
+            })
+    }, [])
+
+    useEffect(() => {
         if (!token) {
-            navigate('/');
+            navigate('/login');
         }
         console.log(token);
         axios.get(`http://127.0.0.1:5000/`, {
@@ -44,7 +58,6 @@ const EventDisplay = (props) => {
             .then((res) => {
                 // console.log(res);
                 const usersCopy = [...res.data]
-                setAllUsers(usersCopy);
                 setAvailableUsers(usersCopy);
             })
             .catch((err) => {
@@ -70,23 +83,23 @@ const EventDisplay = (props) => {
         return formattedDate;
     }
 
-    const handleLogout = (e) => {
-        e.preventDefault();
+    // const handleLogout = (e) => {
+    //     e.preventDefault();
 
-        Cookies.remove('token')
-        navigate('/');
-    }
+    //     Cookies.remove('token')
+    //     navigate('/login');
+    // }
 
     console.log(selectedUser)
-
+    console.log(availableUsers)
 // START HERE: Figure out why duplicate invites are occuring!!!
 
     const setInvite = (eventId, selectedUser) => {
         // console.log("event id:" + events.id)
-        console.log("selected user id" + selectedUser)
-        const user_invite_id = selectedUser
+        console.log("selected user id: " + selectedUser)
+        const user_invite_id = parseInt(selectedUser); 
         const event_id = eventId
-        setAvailableUsers(availableUsers.filter(user => user.id !== selectedUser));
+        setAvailableUsers(prevAvailableUsers => prevAvailableUsers.filter(user => user.id !== user_invite_id && user.id !== users.id));        
         axios.post('http://127.0.0.1:5000/invite', {
             user_invite_id, event_id
         })
@@ -115,9 +128,11 @@ const EventDisplay = (props) => {
             <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
                 <option value="">Select a user to invite</option>
                 {availableUsers.map((user) => (
-                    <option key={user.id} value={user.id}>
-                        {user.first_name} {/* Use the relevant user property */}
-                    </option>
+                    user.id !== users.id && (
+                        <option key={user.id} value={user.id}>
+                            {user.first_name}
+                        </option>
+                    )
                 ))}
             </select>
             <br/>

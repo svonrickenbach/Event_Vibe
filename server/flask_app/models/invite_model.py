@@ -30,3 +30,15 @@ class Invite(BaseModel):
         query = "SELECT * FROM invites WHERE id = %(id)s;"
         results = connectToMySQL(mydb).query_db(query, data)
         return cls(results[0]) 
+    
+# I'm using this next database query classmethod to query for all invites for a given user filtered to one instance of an event
+    @classmethod
+    def get_all(cls):
+        query = "SELECT DISTINCT e.id, e.title, e.date, e.time, e.location, e.description, e.image, i.user_invite_id, i.event_id FROM event_vibe.invites AS i LEFT JOIN event_vibe.events AS e ON i.event_id = e.id WHERE i.user_invite_id = %(user_invite_id)s;"
+        results = connectToMySQL(mydb).query_db(query)
+        # print(results)
+        events = []
+        for event in results:
+            # print(user)
+            events.append(cls(event))
+        return events

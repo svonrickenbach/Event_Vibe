@@ -53,7 +53,7 @@ const AllEvents = (props) => {
     const handleLogout = (e) => {
         e.preventDefault();
         Cookies.remove('token')
-        navigate('/');
+        navigate('/login');
     }
 
     const setStatus = (eventId) => {
