@@ -13,6 +13,8 @@ const EventDisplay = (props) => {
     const token = Cookies.get('token');
     const [selectedUser, setSelectedUser] = useState(''); // Track the selected user
     const [allUsers, setAllUsers] = useState([]);
+    const [availableUsers, setAvailableUsers] = useState([]);
+
 
     useEffect(() => {
         if (!token) {
@@ -41,7 +43,9 @@ const EventDisplay = (props) => {
         })
             .then((res) => {
                 // console.log(res);
-                setAllUsers(res.data);
+                const usersCopy = [...res.data]
+                setAllUsers(usersCopy);
+                setAvailableUsers(usersCopy);
             })
             .catch((err) => {
                 // console.log(err);
@@ -73,11 +77,16 @@ const EventDisplay = (props) => {
         navigate('/');
     }
 
+    console.log(selectedUser)
+
+// START HERE: Figure out why duplicate invites are occuring!!!
+
     const setInvite = (eventId, selectedUser) => {
         // console.log("event id:" + events.id)
-        console.log("selected user id" + selectedUser.id)
-        const user_invite_id = selectedUser.id
+        console.log("selected user id" + selectedUser)
+        const user_invite_id = selectedUser
         const event_id = eventId
+        setAvailableUsers(availableUsers.filter(user => user.id !== selectedUser));
         axios.post('http://127.0.0.1:5000/invite', {
             user_invite_id, event_id
         })
@@ -105,7 +114,7 @@ const EventDisplay = (props) => {
             <br/>
             <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
                 <option value="">Select a user to invite</option>
-                {allUsers.map((user) => (
+                {availableUsers.map((user) => (
                     <option key={user.id} value={user.id}>
                         {user.first_name} {/* Use the relevant user property */}
                     </option>
