@@ -115,7 +115,7 @@ const EventDisplay = (props) => {
     return (
         <div>
             <h1>Event Details</h1>
-            <Link to={"/dashboard"}className="mb-3">Dashboard</Link>
+            <Link to={"/dashboard"} className="mb-3">Dashboard</Link>
             <br></br>
             <Link to="/event/create" className="mb-3">Add Event</Link>
             <p>Title: {event.title}</p>
@@ -123,28 +123,31 @@ const EventDisplay = (props) => {
             {/* <p>Time: {event.time}</p> */}
             <p>Location: {event.location}</p>
             <p>Description: {event.description}</p>
-            <Link to={"/event/update/" + event.id}className="mb-3">Edit</Link>
+            <Link to={"/event/update/" + event.id} className="mb-3">Edit</Link>
             <br/>
-            <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
-                <option value="">Select a user to invite</option>
-                {availableUsers.map((user) => (
-                    user.id !== users.id && (
-                        <option key={user.id} value={user.id}>
-                            {user.first_name}
-                        </option>
-                    )
-                ))}
-            </select>
-            <br/>
-            <button onClick={(e) => { setInvite(event.id, selectedUser) }}>
-                Invite
-            </button>
-            <br></br>
-            <button onClick={(e)=>{deleteEvent(event.id)}}>
-                Delete
-            </button>
+            {users.id === event.user_id && (
+            <div>
+                <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
+                    <option value="">Select a user to invite</option>
+                    {availableUsers.map((user) => (
+                        user.id !== users.id && (
+                            <option key={user.id} value={user.id}>
+                                {user.first_name}
+                            </option>
+                        )
+                    ))}
+                </select>
+                <br/>
+                <button onClick={(e) => { setInvite(event.id, selectedUser) }}>
+                    Invite
+                </button>
+                <br></br>
+                <button onClick={(e)=>{deleteEvent(event.id)}}>
+                    Delete
+                </button>
+            </div>
+            )}
         </div>
     );
 };
-
-export default EventDisplay;
+    export default EventDisplay;

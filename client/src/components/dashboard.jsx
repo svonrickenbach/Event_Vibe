@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 const EventList = (props) => {
     const [events, setEvents] = useState([]);
     const [users, setUsers] = useState([]);
+    const [invites, setInvites] = useState([]);
     const navigate = useNavigate();
     // console.table(events)
     const token = Cookies.get('token');
@@ -43,6 +44,23 @@ const EventList = (props) => {
             })
     }, [])
 
+    useEffect(() => {
+        if (users.id) {
+            axios.get(`http://127.0.0.1:5000/invite/${users.id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then((res) => {
+                    setInvites(res.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    }, [users.id, token]);
+
+
     const formatDate = (dateString) => {
         const options = { weekday: 'long', month: 'long', day: 'numeric' };
         const date = new Date(dateString);
@@ -57,6 +75,7 @@ const EventList = (props) => {
         navigate('/login');
     }
 
+    // START HERE!!! I need to add a remove invite function to this component and call that function in the setStatus function below.
     const setStatus = (eventId) => {
         console.log("event id:" + events.id)
         const user_status_id = users.id
@@ -64,13 +83,13 @@ const EventList = (props) => {
         axios.post('http://127.0.0.1:5000/status', {
             user_status_id, event_id
         })
-        .then((res) => {
-            // console.log(res.data);
-            setUsers(res.data);
-        })
-        .catch((err) => {
-            // console.log(err);
-        }, [])
+            .then((res) => {
+                // console.log(res.data);
+                setUsers(res.data);
+            })
+            .catch((err) => {
+                // console.log(err);
+            }, [])
     }
 
     const setStatusDelete = (eventId) => {
@@ -80,17 +99,18 @@ const EventList = (props) => {
         axios.delete(`http://127.0.0.1:5000/status/${user_status_id}/${event_id}`, {
             user_status_id, event_id
         })
-        .then((res) => {
-            // console.log(res.data);
-            setUsers(res.data);
-        })
-        .catch((err) => {
-            // console.log(err);
-        }, [])
+            .then((res) => {
+                // console.log(res.data);
+                setUsers(res.data);
+            })
+            .catch((err) => {
+                // console.log(err);
+            }, [])
     }
 
     console.log("user_id " + users.id)
 
+    console.log("Checking invites:", invites);
     return (
         <div className="container mt-3">
             <div className="row">
@@ -127,7 +147,7 @@ const EventList = (props) => {
                         <div className="col">
                             <ul className="list-group">
                                 {events.map((event) => (
-                                    users.id === event.user_status_id || users.id === event.user_id ? ( 
+                                    users.id === event.user_status_id || users.id === event.user_id ? (
                                         <li key={event.id} className="list-group-item">
                                             <div className="row align-items-center">
                                                 <div className="col-auto">
@@ -140,55 +160,60 @@ const EventList = (props) => {
                                                         {event.location}
                                                     </div>
                                                     <div>
-                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link> <br></br>
+                                                        <Link to={"/event/" + event.id} className="mb-3">Go to Event</Link> <br></br>
                                                         {users.id !== event.user_id ? (
                                                             <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatusDelete(event.id)}>Gotta Bail</button>
                                                         ) : null}
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>) 
+                                        </li>)
                                         : null
-                                    ))}
+                                ))}
                             </ul>
                             <div className="text-center">
-                                <h1>All Events</h1>
+                                <h1>Invites</h1>
                             </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col">
                             <ul className="list-group">
-                                {events.map((event) => (
-                                    users.id !== event.user_status_id && users.id !== event.user_id ? (
-                                        <li key={event.id} className="list-group-item">
+                                {invites.length === 0 ? (
+                                    <div>
+                                        <h3>You have no invites</h3>
+                                    </div>
+                                ) : (
+                                    invites.map((invite) => (
+                                        <li key={invite.id} className="list-group-item">
                                             <div className="row align-items-center">
                                                 <div className="col-auto">
-                                                    <img src={event.imageUrl} alt={event.title} width="100" height="100" />
+                                                    <img src={invite.imageUrl} alt={invite.title} width="100" height="100" />
                                                 </div>
                                                 <div className="col">
                                                     <div>
-                                                        {formatDate(event.date)} <br />
-                                                        {event.title} <br />
-                                                        {event.location}
+                                                        {formatDate(invite.date)} <br />
+                                                        {invite.title} <br />
+                                                        {invite.location}
                                                     </div>
                                                     <div>
-                                                        <Link to={"/event/" + event.id}className="mb-3">Go to Event</Link><br></br>
-                                                        {users.id !== event.user_id && users.id !== event.user_status_id ? (
-                                                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(event.id)}>Going?</button>
-                                                        ): null
-                                                            }
+                                                        <Link to={"/event/" + invite.id} className="mb-3">Go to Event</Link>
+                                                        <br></br>
+                                                        {users.id !== invite.user_id && users.id !== invite.user_status_id ? (
+                                                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setStatus(invite.id)}>Going?</button>
+                                                        ) : null}
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>) : null 
-                                    ))}
+                                        </li>
+                                    ))
+                                )}
                             </ul>
                         </div>
                     </div>
-                        </div>
-                    </div>
                 </div>
+            </div>
+        </div>
     );
 };
 

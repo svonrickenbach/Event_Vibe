@@ -27,7 +27,7 @@ def create_event():
 def get_all_events(): 
         events = Event.get_all()
         events_converted_to_json = [event.to_json() for event in events]
-        print(events_converted_to_json)
+        # print(events_converted_to_json)
         return jsonify(events_converted_to_json), 200
 
 @app.route('/event/<int:id>', methods=['GET'])

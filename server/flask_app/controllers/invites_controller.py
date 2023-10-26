@@ -15,13 +15,13 @@ def create_invite():
 
     return jsonify(invite_object.to_json()), 201
 
-@app.route('/invite', methods=['GET'], endpoint='invites_get')
+@app.route('/invite/<int:id>', methods=['GET'])
 @jwt_required()
-def get_all_invites(): 
-        invites = Invite.get_all()
-        events_converted_to_json = [event.to_json() for event in events]
-        print(events_converted_to_json)
-        return jsonify(events_converted_to_json), 200
+def get_all_invites(id): 
+        invites = Invite.get_all({"user_invite_id":id})
+        invites_converted_to_json = [invite.to_json() for invite in invites]
+        print(invites_converted_to_json)
+        return jsonify(invites_converted_to_json), 200
 
 
 
