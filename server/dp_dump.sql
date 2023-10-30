@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `event_vibe` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `event_vibe`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
 -- Host: localhost    Database: event_vibe
@@ -88,14 +86,14 @@ DROP TABLE IF EXISTS `invites`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `invites` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `users_id` int NOT NULL,
-  `events_id` int NOT NULL,
+  `user_invite_id` int NOT NULL,
+  `event_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_users_has_events_events2_idx` (`events_id`),
-  KEY `fk_users_has_events_users1_idx` (`users_id`),
-  CONSTRAINT `fk_users_has_events_events2` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`),
-  CONSTRAINT `fk_users_has_events_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  KEY `fk_users_has_events_events2_idx` (`event_id`),
+  KEY `fk_users_has_events_users1_idx` (`user_invite_id`),
+  CONSTRAINT `fk_users_has_events_events2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`),
+  CONSTRAINT `fk_users_has_events_users1` FOREIGN KEY (`user_invite_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,6 +102,7 @@ CREATE TABLE `invites` (
 
 LOCK TABLES `invites` WRITE;
 /*!40000 ALTER TABLE `invites` DISABLE KEYS */;
+INSERT INTO `invites` VALUES (35,1,9);
 /*!40000 ALTER TABLE `invites` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +122,7 @@ CREATE TABLE `statuses` (
   KEY `fk_users_has_events_users_idx` (`user_status_id`),
   CONSTRAINT `fk_users_has_events_events1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`),
   CONSTRAINT `fk_users_has_events_users` FOREIGN KEY (`user_status_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,6 +131,7 @@ CREATE TABLE `statuses` (
 
 LOCK TABLES `statuses` WRITE;
 /*!40000 ALTER TABLE `statuses` DISABLE KEYS */;
+INSERT INTO `statuses` VALUES (27,1,9);
 /*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Sam','Rickenbach','samrickenbach@gmail.com','$2b$12$QFOmPWtYkGXr3HmpGSWBveHdcxoyJJiHuxpn7yTy/n/kLQgKuB7oy','2023-05-15 21:43:54','2023-05-15 21:43:54'),(2,'Greg','Jones','Greg@gmail.com','$2b$12$0YLIYTek06ksGZ0vKwYwNODmtCmbZJntTnbGxaRMGNOeC1uP9StJy','2023-09-17 14:40:44','2023-09-17 14:40:44');
+INSERT INTO `users` VALUES (1,'Sam','Rickenbach','samrickenbach@gmail.com','$2b$12$QFOmPWtYkGXr3HmpGSWBveHdcxoyJJiHuxpn7yTy/n/kLQgKuB7oy','2023-05-15 21:43:54','2023-05-15 21:43:54'),(2,'Greg','Jones','Greg@gmail.com','$2b$12$0YLIYTek06ksGZ0vKwYwNODmtCmbZJntTnbGxaRMGNOeC1uP9StJy','2023-09-17 14:40:44','2023-09-17 14:40:44'),(3,'Alan','Kabalan','Alan@gmail.com','$2b$12$T5m.SWxjJt3XwwCtCJAMOuGKq6DGZca5jRg3TWIdOI.LZlVwZ85M.','2023-10-25 13:07:23','2023-10-25 13:07:23');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-24 15:00:06
+-- Dump completed on 2023-10-30 16:10:50
