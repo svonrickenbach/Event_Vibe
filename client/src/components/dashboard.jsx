@@ -72,7 +72,7 @@ const EventList = (props) => {
         e.preventDefault();
 
         Cookies.remove('token')
-        navigate('/login');
+        navigate('/');
     }
 
     // START HERE!!! I need to add a remove invite function to this component and call that function in the setStatus function below.
